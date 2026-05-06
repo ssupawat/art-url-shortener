@@ -50,30 +50,18 @@ func (h *DefaultHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		method := r.Method
-		if method == "GET" {
-			w.WriteHeader(http.StatusOK)
-			fmt.Fprint(w, "hello")
-		} else {
-			w.WriteHeader(http.StatusNotFound)
-			fmt.Fprint(w, "not found")
-		}
+	mux.HandleFunc("GET /hello", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "hello")
 	})
 
-	mux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
-		method := r.Method
-		if method == "GET" {
-			user := &User{
-				ID:   "1234",
-				Name: "Alice",
-			}
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(user)
-		} else {
-			w.WriteHeader(http.StatusNotFound)
-			fmt.Fprint(w, "not found")
+	mux.HandleFunc("GET /users", func(w http.ResponseWriter, r *http.Request) {
+		user := &User{
+			ID:   "1234",
+			Name: "Alice",
 		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(user)
 	})
 
 	http.ListenAndServe(":8080", func(next http.Handler) http.Handler {
