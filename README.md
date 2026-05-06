@@ -44,3 +44,32 @@ http.Request
 http.Client
 http.Transport
 ```
+
+## What I learned
+- Go type conversion: type(value) for example []byte("hello")
+- extract a concrete type out of an interface by: value.(type) X cannot use with concrete types like 5.(int) this will error
+- go run . vs go run main.go: go run main.go only reads main.go not other files but go run . reads all files in the current directory
+
+## Version 1 - Hello net/http
+
+```
+package main
+
+import "net/http"
+
+type DefaultHandler struct{}
+
+func (h *DefaultHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("hello"))
+}
+
+func main() {
+	handler := &DefaultHandler{}
+	http.ListenAndServe(":8080", handler)
+}
+```
+
+the response body will be
+```
+hello
+```
