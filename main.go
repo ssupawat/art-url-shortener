@@ -65,18 +65,40 @@ func IPWhitelistMiddleware(next http.Handler) http.Handler {
 func main() {
 	mux := http.NewServeMux()
 
+	user1 := &User{
+		ID:   "1",
+		Name: "Alice",
+	}
+	user2 := &User{
+		ID:   "2",
+		Name: "Bob",
+	}
+
 	mux.HandleFunc("GET /hello", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, "hello")
 	})
 
 	mux.HandleFunc("GET /users", func(w http.ResponseWriter, r *http.Request) {
-		user := &User{
-			ID:   "1234",
-			Name: "Alice",
-		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(user)
+		json.NewEncoder(w).Encode([]*User{
+			user1, user2,
+		})
+	})
+
+	mux.HandleFunc("GET /users/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		switch id {
+		case "1":
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(user1)
+		case "2":
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(user2)
+		default:
+			w.WriteHeader(http.StatusNotFound)
+			fmt.Fprint(w, "not found")
+		}
 	})
 
 	http.ListenAndServe(":8080", IPWhitelistMiddleware(mux))

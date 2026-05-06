@@ -92,3 +92,10 @@ In Go or context of web servers, we have what can do this called Multiplexer or 
 We can use http.ServeMux by directly register handle func though http.HandleFunc this will registor to http.DefaultServeMux or create new http.ServeMux by http.NewServeMux()
 
 This is weighting between global and local mux
+
+Ok, I think now we can move forward from net/http
+
+## Version 3 - Get value from path
+
+In Go 1.22+, we extract the id from the URL by using a named wildcard in our pattern and the r.PathValue() method in our handler.
+https://go.dev/blog/routing-enhancements#:~:text=The%20new%20routing%20features%20almost,%E2%80%9D%20and%20has%20two%20segments.%20(
