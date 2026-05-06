@@ -88,3 +88,7 @@ how can we separate differences between each request? -> path, method, body, hea
 We need new handler that can help me do this
 
 In Go or context of web servers, we have what can do this called Multiplexer or Mux
+
+We can use http.ServeMux by directly register handle func though http.HandleFunc this will registor to http.DefaultServeMux or create new http.ServeMux by http.NewServeMux()
+
+This is weighting between global and local mux
