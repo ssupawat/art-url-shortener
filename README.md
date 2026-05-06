@@ -81,9 +81,7 @@ responding 'hello'
 
 How can we enhance it?
 
-Read a request then route it to many functions?
-
-### How to read body in Go
-https://www.alexedwards.net/blog/how-to-properly-parse-a-json-request-body
+Read a request then route it to many response?
+how can we separate differences between each request? -> path, method, body, header, remote address
 
 ### Other ways to do this
