@@ -85,3 +85,6 @@ Read a request then route it to many response?
 how can we separate differences between each request? -> path, method, body, header, remote address
 
 ### Other ways to do this
+We need new handler that can help me do this
+
+In Go or context of web servers, we have what can do this called Multiplexer or Mux
