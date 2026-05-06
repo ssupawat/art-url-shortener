@@ -73,3 +73,17 @@ the response body will be
 ```
 hello
 ```
+
+## Version 2 - More than 1 handler?
+As you see, the HTTP server contain only 1 bahavior
+
+responding 'hello'
+
+How can we enhance it?
+
+Read a request then route it to many functions?
+
+### How to read body in Go
+https://www.alexedwards.net/blog/how-to-properly-parse-a-json-request-body
+
+### Other ways to do this
