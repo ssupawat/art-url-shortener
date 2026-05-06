@@ -47,6 +47,21 @@ func (h *DefaultHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func IsWhitelisted(ip string) bool {
+	return slices.Contains(WhiteListIps, ip)
+}
+
+func IPWhitelistMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+		if !IsWhitelisted(ip) {
+			http.Error(w, fmt.Sprintf("%s cannot access this http server", ip), http.StatusBadRequest)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	mux := http.NewServeMux()
 
@@ -64,14 +79,5 @@ func main() {
 		json.NewEncoder(w).Encode(user)
 	})
 
-	http.ListenAndServe(":8080", func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			ip, _, _ := net.SplitHostPort(r.RemoteAddr)
-			if !slices.Contains(WhiteListIps, ip) {
-				http.Error(w, fmt.Sprintf("%s cannot access this http server", ip), http.StatusBadRequest)
-				return
-			}
-			next.ServeHTTP(w, r)
-		})
-	}(mux))
+	http.ListenAndServe(":8080", IPWhitelistMiddleware(mux))
 }
